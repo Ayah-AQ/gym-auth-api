@@ -8,4 +8,3 @@ const foodModel = (sequelize, DataTypes) => sequelize.define('food', {
 
 module.exports = foodModel;
 
-// check the notes on your note book

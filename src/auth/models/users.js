@@ -6,20 +6,19 @@ const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET || 'secretstring';
 
 const userModel = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const model = sequelize.define('Users', {
     username: { type: DataTypes.STRING, required: true, unique: true },
     password: { type: DataTypes.STRING, required: true },
-    role: { type: DataTypes.ENUM('user', 'gymOwner', 'coach', 'admin'), required: true, defaultValue: 'user' },
+    role: { type: DataTypes.ENUM('user', 'coach', 'owner', 'admin'), required: true, defaultValue: 'user'},
     token: {
-      type: DataTypes.VIRTUAL
-    },
+      type: DataTypes.VIRTUAL  },
     capabilities: {
       type: DataTypes.VIRTUAL,
       get() {
         const acl = {
           user: ['read', 'create'],
-          gymOwner: ['read', 'create', 'update', 'delete'],
-          coach: ['read', 'update'],
+          coach: ['read', 'create', 'update'],
+          owner:['read', 'create', 'update', 'delete'],
           admin: ['read', 'create', 'update', 'delete']
         };
         return acl[this.role];
@@ -27,17 +26,19 @@ const userModel = (sequelize, DataTypes) => {
     }
   });
 
-  User.beforeCreate(async (user) => {
+  model.beforeCreate(async (user) => {
     let hashedPass = await bcrypt.hash(user.password, 10);
     user.password = hashedPass;
   });
 
-  User.authenticateBasic = async function (username, password) {
-    const user = await User.findOne({ where: { username } });
+ 
+  model.authenticateBasic = async function (username, password) {
+    const user = await model.findOne({ where: { username } });
     const isValid = await bcrypt.compare(password, user.password);
 
     if (isValid) {
       const userToken = jwt.sign({ username: user.username, password: user.password }, SECRET);
+      // console.log(userToken);
       return {
         user,
         token: userToken,
@@ -47,9 +48,9 @@ const userModel = (sequelize, DataTypes) => {
     }
   };
 
-  User.authenticateToken = async function (token) {
+  model.authenticateToken = async function (token) {
     const parsedToken = jwt.verify(token, SECRET);
-    const user = await User.findOne({ where: { username: parsedToken.username } });
+    const user = await model.findOne({ where: { username: parsedToken.username } });
     if (user.username) {
       return user;
     } else {
@@ -57,10 +58,17 @@ const userModel = (sequelize, DataTypes) => {
     }
   };
 
-  // Define associations
-  User.hasMany(sequelize.models.Class, { foreignKey: 'userId', as: 'classes' });
+  model.associate = (models) => {
+    model.hasMany(models.Equipment);
+    model.hasMany(models.Food);
+    model.hasMany(models.Schedule);
+    model.belongsTo(models.Gym);
+    model.belongsTo(models.Trainer);
+  };
 
-  return User;
+  return model;
 };
+
+ 
 
 module.exports = userModel;

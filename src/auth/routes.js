@@ -3,7 +3,7 @@
 const express = require('express');
 const authRouter = express.Router();
 
-const { users } = require('./models/users');
+const { users } = require('../models/index');
 const basicAuth = require('./middleware/basic.js');
 const bearerAuth = require('./middleware/bearer.js');
 const permissions = require('./middleware/acl.js');
@@ -47,8 +47,8 @@ authRouter.get('/users', bearerAuth, permissions('delete'), async (req, res, nex
   }
 });
 
-authRouter.get('/gym', bearerAuth, async (req, res, next) => {
-  res.status(200).send('Welcome to the gym');
+authRouter.get('/secret', bearerAuth, async (req, res, next) => {
+  res.status(200).send('Welcome to the secret area');
 });
 
 // Error handling middleware

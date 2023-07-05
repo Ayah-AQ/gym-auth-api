@@ -2,7 +2,7 @@
 require('dotenv').config();
 const port = process.env.PORT || 8000;
 const server = require('./src/server');
-const { db } = require('./src/models/index.js');
+const { db } = require('./src/models/index');
 
 
 db.sync()
