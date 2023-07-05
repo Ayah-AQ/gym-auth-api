@@ -30,12 +30,18 @@ authRouter.use((error, req, res, next) => {
 });
 
 authRouter.post('/signin', basicAuth, (req, res, next) => {
-  // const user = {
-  //   user: req.user,
-  //   token: req.user.token
-  // };
-  res.status(200).json(req.user);
+  try {
+    // const user = {
+    //   user: req.user,
+    //   token: req.user.token
+    // };
+    res.status(200).json(req.user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred during sign-in');
+  }
 });
+
 
 authRouter.get('/users', bearerAuth, permissions('delete'), async (req, res, next) => {
   try {

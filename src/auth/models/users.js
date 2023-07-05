@@ -58,14 +58,6 @@ const userModel = (sequelize, DataTypes) => {
     }
   };
 
-  model.associate = (models) => {
-    model.hasMany(models.Equipment);
-    model.hasMany(models.Food);
-    model.hasMany(models.Schedule);
-    model.belongsTo(models.Gym);
-    model.belongsTo(models.Trainer);
-  };
-
   return model;
 };
 

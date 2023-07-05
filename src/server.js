@@ -20,8 +20,8 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(authRoutes);
 
-app.use('/api/v1', v1Routes);
-app.use('/api/v2', v2Routes);
+app.use('/v1', v1Routes);
+app.use('/v2', v2Routes);
 
 app.get("/",(req,res)=>{
   res.send("HELLO!")

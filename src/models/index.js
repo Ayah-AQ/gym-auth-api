@@ -1,8 +1,11 @@
 'use strict';
 
 const { Sequelize, DataTypes } = require('sequelize');
-// const clothesModel = require('./clothes/model');
 const foodModel = require('./food/model');
+const Equipment = require('./equipments/modal');
+const Gym = require('./gym/model');
+const Scedual = require('./scedual/modal');
+const Trainer = require('./trainor/modal');
 const Collection = require('./data-collection.js');
 const userModel = require('../auth/models/users');
 
@@ -23,10 +26,17 @@ let sequelizeOptions = process.env.NODE_ENV === "production" ?
 
 
 const food = foodModel(sequelize, DataTypes);
-// const clothes = clothesModel(sequelize, DataTypes);
+const equipment = Equipment(sequelize, DataTypes);
+const gym = Gym(sequelize, DataTypes);
+const scedual = Scedual(sequelize, DataTypes);
+const trainer = Trainer(sequelize, DataTypes);
+
 module.exports = {
   db: sequelize,
   food: new Collection(food),
-//   clothes: new Collection(clothes),
+  equipment: new Collection(equipment),
+  gym: new Collection(gym),
+  scedual: new Collection(scedual),
+  trainer: new Collection(trainer),
   users: userModel(sequelize, DataTypes),
 };
