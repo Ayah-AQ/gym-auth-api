@@ -8,9 +8,9 @@ The Gym Auth API provides the following endpoints:
 
 - `POST /signup`: Create a new user account.
 - `POST /signin`: Authenticate user credentials and generate a token.
-- `GET /api/v1/`: Get a list of gym-related data (equipment, food, schedules, trainers).
-- `GET /api/v2/`: Get an extended list of gym-related data (requires admin role).
-- `GET /api/v1/secret`: Access a protected route (requires bearer token authentication).
+- `GET /v1/`: Get a list of gym-related data (equipment, food, schedules, trainers).
+- `GET /v2/`: Get an extended list of gym-related data (requires admin role).
+- `GET /v1/secret`: Access a protected route (requires bearer token authentication).
 
 
 ## PR
